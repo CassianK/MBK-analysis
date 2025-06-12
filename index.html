@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홈플러스-MBK 투자 실패 사례 분석</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="홈플러스-MBK 투자 실패 사례를 11개 검증기관 데이터로 분석한 인터랙티브 대시보드">
+    <meta property="og:title" content="홈플러스-MBK 투자 실패 사례 분석 대시보드">
+    <meta property="og:description" content="7.2조원 인수부터 기업회생까지, 11개 검증기관 데이터 기반 분석">
+    <meta property="og:type" content="website">
+    
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            background-color: #ef4444;
+            color: white;
+            border-bottom: 2px solid #ef4444;
+        }
+        .tab-button:not(.active) {
+            background-color: #f3f4f6;
+            color: #6b7280;
+        }
+        .tab-button:not(.active):hover {
+            background-color: #e5e7eb;
+        }
+        .metric-card {
+            transition: transform 0.2s ease;
+        }
+        .metric-card:hover {
+            transform: translateY(-2px);
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="w-full max-w-7xl mx-auto p-6">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg mb-6 p-6">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">
+                홈플러스-MBK 투자 실패 사례 분석
+            </h1>
+            <p class="text-gray-600">
+                공식 재무제표 기반 정확한 데이터 분석 (2015-2025)
+            </p>
+            <div class="mt-3 text-sm text-gray-500">
+                * 모든 데이터는 11개 검증기관의 공개 감사보고서, 신용평가사 자료, 경제전문지 보도를 기반으로 작성
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="flex space-x-1 mb-6">
+            <button class="tab-button active px-6 py-3 font-medium rounded-t-lg" onclick="showTab('overview')">핵심 지표</button>
+            <button class="tab-button px-6 py-3 font-medium rounded-t-lg" onclick="showTab('debt')">부채 분석</button>
+            <button class="tab-button px-6 py-3 font-medium rounded-t-lg" onclick="showTab('stakeholders')">이해관계자 피해</button>
+            <button class="tab-button px-6 py-3 font-medium rounded-t-lg" onclick="showTab('timeline')">사건 타임라인</button>
+            <button class="tab-button px-6 py-3 font-medium rounded-t-lg" onclick="showTab('sources')">데이터 출처</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content">
+            <!-- Key Metrics -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="metric-card bg-white rounded-lg shadow-lg p-6 border-l-4 border-blue-500">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">인수 금액</p>
+                            <p class="text-2xl font-bold text-blue-600">7.2조원</p>
+                            <p class="text-gray-500 text-xs mt-1">2015년 9월</p>
+                        </div>
+                        <div class="h-8 w-8 text-blue-500 text-2xl">💰</div>
+                    </div>
+                </div>
+
+                <div class="metric-card bg-white rounded-lg shadow-lg p-6 border-l-4 border-red-500">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">매출 감소</p>
+                            <p class="text-2xl font-bold text-red-600">19%</p>
+                            <p class="text-gray-500 text-xs mt-1">8.57조 → 6.93조원</p>
+                        </div>
+                        <div class="h-8 w-8 text-red-500 text-2xl">📉</div>
+                    </div>
+                </div>
+
+                <div class="metric-card bg-white rounded-lg shadow-lg p-6 border-l-4 border-red-500">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">부채비율 최고</p>
+                            <p class="text-2xl font-bold text-red-600">3,212%</p>
+                            <p class="text-gray-500 text-xs mt-1">2023년 2월</p>
+                        </div>
+                        <div class="h-8 w-8 text-red-500 text-2xl">⚠️</div>
+                    </div>
+                </div>
+
+                <div class="metric-card bg-white rounded-lg shadow-lg p-6 border-l-4 border-orange-500">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">직원 감소</p>
+                            <p class="text-2xl font-bold text-orange-600">5,500명</p>
+                            <p class="text-gray-500 text-xs mt-1">25,000 → 19,500명</p>
+                        </div>
+                        <div class="h-8 w-8 text-orange-500 text-2xl">👥</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-bold mb-4">매출액 추이 (억원)</h3>
+                    <div class="chart-container">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                    <div class="mt-3 text-sm text-gray-600">
+                        <p><span class="text-red-600 font-semibold">19% 감소</span>: 8.57조원(2014) → 6.93조원(2023)</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-bold mb-4">수익성 지표 (억원)</h3>
+                    <div class="chart-container">
+                        <canvas id="profitChart"></canvas>
+                    </div>
+                    <div class="mt-3 text-sm text-gray-600 space-y-1">
+                        <p>• <span class="text-purple-600 font-semibold">EBITDA</span>: 2022년부터 개선 (2,204억 → 3,889억)</p>
+                        <p>• <span class="text-blue-600 font-semibold">영업손실</span>: 3년 연속 적자 지속</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Summary -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <h3 class="text-xl font-bold mb-4">📊 종합 재무 분석</h3>
+                <div class="mt-4 text-sm text-gray-600 space-y-2">
+                    <p>• <strong>매출 하락</strong>: MBK 인수 후 지속적 감소 (-19%, 1.64조원 감소)</p>
+                    <p>• <strong>EBITDA 개선</strong>: 메가푸드마켓 전환(27개점), 온라인 강화(1조원 매출) 효과</p>
+                    <p>• <strong>영업손실 지속</strong>: 구조적 문제 - 연 4,500억 리스 임대료 부담</p>
+                    <p>• <strong>핵심 모순</strong>: 현금창출(EBITDA)은 증가하지만 영업손실은 지속 (감가상각비 차이)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debt Tab -->
+        <div id="debt" class="tab-content hidden">
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <h3 class="text-xl font-bold mb-4">📊 부채 금액의 실체 (조원)</h3>
+                
+                <div class="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <h4 class="font-bold text-yellow-800 mb-2">🚨 비율의 함정</h4>
+                    <div class="text-sm text-yellow-700">
+                        <p>비율로 보면 "개선"처럼 보이지만, <strong>실제 부채 금액</strong>을 보면 진실이 드러납니다!</p>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="debtChart"></canvas>
+                </div>
+                
+                <div class="mt-4 text-sm text-gray-600 space-y-2">
+                    <p>🔴 <strong>금융부채</strong>: 1.38조 → 0.58조 (-0.8조, RCPS 전환으로 감소)</p>
+                    <p>🟡 <strong>리스부채</strong>: 3.85조 → 3.85조 (0원 변화, 87% 비중)</p>
+                    <p>🟢 <strong>기존 자본</strong>: 0.43조 → 0.43조 (변화없음)</p>
+                    <p>🔵 <strong>RCPS→자본</strong>: 0조 → 0.8조 (+0.8조, 전환분)</p>
+                    <p class="text-red-600 font-semibold">💡 핵심: 리스부채 3.85조원은 1원도 줄지 않음!</p>
+                </div>
+            </div>
+
+            <!-- ABSTB Section -->
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                <h4 class="text-lg font-bold text-yellow-800 mb-3">🏦 ABSTB (자산유동화증권) 사건</h4>
+                <div class="space-y-4 text-yellow-700">
+                    <div>
+                        <p class="font-semibold">ABSTB란? Asset-Backed Securities Tied to Business</p>
+                        <p class="text-sm">홈플러스 부동산을 담보로 한 대출채권을 증권화한 상품</p>
+                    </div>
+                    
+                    <div class="bg-red-100 p-4 rounded-lg">
+                        <h5 class="font-bold text-red-800 mb-2">🎭 제재 주체와 권한의 논란</h5>
+                        <div class="text-sm text-red-700 space-y-2">
+                            <div>
+                                <p class="font-semibold">1️⃣ 제재 주체 불분명</p>
+                                <p>• <strong>🔴 증권업계 주장:</strong> "MBK가 개인투자자 판매는 불가하다고 통보"</p>
+                                <p>• <strong>🔵 MBK 전면 부인:</strong> "유동화증권 양도 동의권 없어 개인 판매 막을 수 없다"</p>
+                                <p>• 감독당국이 아닌 MBK가 어떤 권한으로 제재했는지 의문</p>
+                            </div>
+                            <div>
+                                <p class="font-semibold">2️⃣ 법적 근거의 모호성</p>
+                                <p>• ABSTB는 독립된 SPC가 발행한 증권</p>
+                                <p>• 홈플러스 주주인 MBK의 직접적 통제권 근거 없음</p>
+                                <p>• 사실상의 영향력을 통한 간접 개입 가능성만 존재</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="font-semibold text-red-700">💀 금융당국 판단</p>
+                        <p class="text-sm text-red-600">
+                            금융위 증선위가 MBK와 홈플러스를 <strong>"사기적 부정거래"</strong> 혐의로 
+                            검찰에 이첩 (2025.04.22). 신용등급 하락을 미리 알고도 ABSTB 발행을 방조했다는 의혹
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stakeholders Tab -->
+        <div id="stakeholders" class="tab-content hidden">
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <h3 class="text-xl font-bold mb-4">투자자별 손실 현황 (억원)</h3>
+                <div class="chart-container">
+                    <canvas id="damageChart"></canvas>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                <div class="text-center p-4 bg-red-50 rounded-lg">
+                    <div class="text-4xl mb-2">👥</div>
+                    <h4 class="font-bold text-red-700">직접 고용</h4>
+                    <p class="text-2xl font-bold text-red-600">19,500명</p>
+                    <p class="text-sm text-red-500">2015년 25,000명에서 감소</p>
+                </div>
+                <div class="text-center p-4 bg-orange-50 rounded-lg">
+                    <div class="text-4xl mb-2">🏢</div>
+                    <h4 class="font-bold text-orange-700">협력사</h4>
+                    <p class="text-2xl font-bold text-orange-600">6,000개</p>
+                    <p class="text-sm text-orange-500">미지급금 4,584억원</p>
+                </div>
+                <div class="text-center p-4 bg-blue-50 rounded-lg">
+                    <div class="text-4xl mb-2">🏪</div>
+                    <h4 class="font-bold text-blue-700">점포 폐점</h4>
+                    <p class="text-2xl font-bold text-blue-600">15개</p>
+                    <p class="text-sm text-blue-500">141개→126개</p>
+                </div>
+                <div class="text-center p-4 bg-purple-50 rounded-lg">
+                    <div class="text-4xl mb-2">⚠️</div>
+                    <h4 class="font-bold text-purple-700">총 피해</h4>
+                    <p class="text-2xl font-bold text-purple-600">1.28조원</p>
+                    <p class="text-sm text-purple-500">확인된 손실</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline Tab -->
+        <div id="timeline" class="tab-content hidden">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-6">📅 검증된 주요 사건 타임라인 (1997-2025)</h3>
+                
+                <div class="mb-4 flex space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <span class="text-sm text-gray-600">치명적 영향</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-orange-500 rounded-full"></div>
+                        <span class="text-sm text-gray-600">높은 영향</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <span class="text-sm text-gray-600">보통 영향</span>
+                    </div>
+                </div>
+
+                <div class="space-y-4" id="timeline-events">
+                    <!-- Timeline events will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Sources Tab -->
+        <div id="sources" class="tab-content hidden">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-6">📚 검증된 데이터 출처 (총 11개 기관)</h3>
+                
+                <div class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="text-center p-3 bg-blue-50 rounded-lg">
+                        <h4 class="font-bold text-blue-800">경제전문지</h4>
+                        <p class="text-2xl font-bold text-blue-600">4개</p>
+                        <p class="text-xs text-blue-500">인베스트조선, 비즈한국 등</p>
+                    </div>
+                    <div class="text-center p-3 bg-green-50 rounded-lg">
+                        <h4 class="font-bold text-green-800">재무분석</h4>
+                        <p class="text-2xl font-bold text-green-600">2개</p>
+                        <p class="text-xs text-green-500">전문 재무제표 분석</p>
+                    </div>
+                    <div class="text-center p-3 bg-purple-50 rounded-lg">
+                        <h4 class="font-bold text-purple-800">IT/전문지</h4>
+                        <p class="text-2xl font-bold text-purple-600">2개</p>
+                        <p class="text-xs text-purple-500">ZDNet, 더스쿱</p>
+                    </div>
+                    <div class="text-center p-3 bg-orange-50 rounded-lg">
+                        <h4 class="font-bold text-orange-800">일반언론</h4>
+                        <p class="text-2xl font-bold text-orange-600">3개</p>
+                        <p class="text-xs text-orange-500">뉴스핌, 헤럴드 등</p>
+                    </div>
+                </div>
+
+                <div id="sources-list">
+                    <!-- Sources will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-lg p-6 mt-8">
+            <h3 class="text-xl font-bold mb-4">🎯 11개 기관 검증된 핵심 사실</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                <div>
+                    <h4 class="font-semibold text-yellow-400 mb-2">🔥 재무적 실패</h4>
+                    <p class="mb-1">부채비율 3,212% 기록 (2023.02)</p>
+                    <p class="mb-1">리스부채 3.85조원</p>
+                    <p>3년 연속 영업적자 (5,930억 누적)</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-yellow-400 mb-2">💸 자산 해체</h4>
+                    <p class="mb-1">10년간 4.1조원 자산매각</p>
+                    <p class="mb-1">우량점포 15개 폐점</p>
+                    <p>매각자금 → 인수금융 상환용</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-yellow-400 mb-2">📉 경영 악화</h4>
+                    <p class="mb-1">매출 19% 감소 (8.57→6.93조)</p>
+                    <p class="mb-1">직원 22% 감소 (25,000→19,500명)</p>
+                    <p>자본총액 88% 감소 (2.3조→0.27조)</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-yellow-400 mb-2">🏛️ 사회적 비용</h4>
+                    <p class="mb-1">RCPS 투자자 1.07조 위험</p>
+                    <p class="mb-1">협력사 4,584억 미지급</p>
+                    <p>확인된 피해 1.28조원</p>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-600">
+                <p class="text-xs text-gray-300">
+                    * 모든 수치는 공개된 감사보고서, 신용평가보고서, 11개 검증기관 보도자료 기반 (2025.06.12 기준)
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.add('hidden'));
+            
+            // Remove active class from all tab buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.remove('hidden');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Initialize charts when tabs are shown
+            setTimeout(() => {
+                if (tabName === 'overview') {
+                    initSalesChart();
+                    initProfitChart();
+                } else if (tabName === 'debt') {
+                    initDebtChart();
+                } else if (tabName === 'stakeholders') {
+                    initDamageChart();
+                }
+            }, 100);
+        }
+
+        // Financial data
+        const financialData = {
+            labels: ['2014', '2015', '2019', '2020', '2021', '2022', '2023', '2024'],
+            sales: [85682, 67000, 73001, 69662, 64807, 66006, 69315, null],
+            ebitda: [null, null, null, null, null, 2204, 2720, 3889],
+            operatingProfit: [1944, -1490, 1601, 933, -1335, -2602, -1994, -1571]
+        };
+
+        // Initialize Sales Chart
+        function initSalesChart() {
+            const ctx = document.getElementById('salesChart');
+            if (!ctx) return;
+            
+            if (ctx.chart) {
+                ctx.chart.destroy();
+            }
+            
+            ctx.chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: financialData.labels.slice(0, 7), // Exclude 2024 for sales
+                    datasets: [{
+                        label: '매출액 (억원)',
+                        data: financialData.sales.slice(0, 7),
+                        borderColor: '#ff6b6b',
+                        backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                        borderWidth: 4,
+                        pointBackgroundColor: '#ff6b6b',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 60000,
+                            max: 90000,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString() + '억';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y.toLocaleString() + '억원';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize Profit Chart
+        function initProfitChart() {
+            const ctx = document.getElementById('profitChart');
+            if (!ctx) return;
+            
+            if (ctx.chart) {
+                ctx.chart.destroy();
+            }
+            
+            ctx.chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: financialData.labels,
+                    datasets: [{
+                        label: 'EBITDA (억원)',
+                        data: financialData.ebitda,
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        borderWidth: 4,
+                        pointBackgroundColor: '#8b5cf6',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        tension: 0.1,
+                        spanGaps: true
+                    }, {
+                        label: '영업이익/손실 (억원)',
+                        data: financialData.operatingProfit,
+                        borderColor: '#45b7d1',
+                        backgroundColor: 'rgba(69, 183, 209, 0.1)',
+                        borderWidth: 4,
+                        pointBackgroundColor: '#45b7d1',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: -3000,
+                            max: 4500,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString() + '억';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.parsed.y === null) return context.dataset.label + ': 데이터 없음';
+                                    return context.dataset.label + ': ' + context.parsed.y.toLocaleString() + '억원';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize Debt Chart
+        function initDebtChart() {
+            const ctx = document.getElementById('debtChart');
+            if (!ctx) return;
+            
+            if (ctx.chart) {
+                ctx.chart.destroy();
+            }
+            
+            ctx.chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['2023-02', '2023-11', '2024-01'],
+                    datasets: [{
+                        label: '금융부채',
+                        data: [1380, 1200, 580],
+                        backgroundColor: '#ef4444',
+                        stack: 'debt'
+                    }, {
+                        label: '리스부채',
+                        data: [3850, 3850, 3850],
+                        backgroundColor: '#fbbf24',
+                        stack: 'debt'
+                    }, {
+                        label: '기존 자본',
+                        data: [430, 430, 430],
+                        backgroundColor: '#10b981',
+                        stack: 'equity'
+                    }, {
+                        label: 'RCPS→자본전환',
+                        data: [0, 0, 800],
+                        backgroundColor: '#06b6d4',
+                        stack: 'equity'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            stacked: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '조원';
+                                }
+                            }
+                        },
+                        x: {
+                            stacked: true
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + '조원';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize Damage Chart
+        function initDamageChart() {
+            const ctx = document.getElementById('damageChart');
+            if (!ctx) return;
+            
+            if (ctx.chart) {
+                ctx.chart.destroy();
+            }
+            
+            ctx.chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['국민연금 (RCPS)', 'MG새마을금고 (RCPS)', '기타 RCPS 투자자', '협력사 미지급금', 'ABSTB 투자자'],
+                    datasets: [{
+                        data: [6000, 700, 500, 4584, 1000],
+                        backgroundColor: ['#ff6b6b', '#4ecdc4', '#45b7d1', '#ffeaa7', '#fd79a8']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed.toLocaleString() + '억원';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize timeline
+        function initTimeline() {
+            const timeline = [
+                { date: '1997.09', event: '삼성물산, 대구 1호점 개점', impact: 'medium' },
+                { date: '1999.06', event: '삼성물산-테스코 합작 (삼성테스코)', impact: 'medium' },
+                { date: '2015.09', event: 'MBK 홈플러스 인수 (7.2조원)', impact: 'critical' },
+                { date: '2015.10', event: 'Sale & Leaseback 시작 (5개 점포)', impact: 'critical' },
+                { date: '2016-2018', event: '1차 대규모 자산매각 (1조원)', impact: 'high' },
+                { date: '2019-2020', event: '2차 자산매각 (8천억원)', impact: 'high' },
+                { date: '2021년', event: '3년 연속 적자 시작 (-1,335억)', impact: 'critical' },
+                { date: '2021년', event: '3차 자산매각 (1.5조원)', impact: 'high' },
+                { date: '2022년', event: 'EBITDA 첫 공개 (2,204억원)', impact: 'medium' },
+                { date: '2022-2024', event: '4차 자산매각 (8천억원)', impact: 'high' },
+                { date: '2023.02', event: '부채비율 3,212% 기록 (역대최고)', impact: 'critical' },
+                { date: '2023년', event: 'EBITDA 2,720억원 개선', impact: 'medium' },
+                { date: '2024.01', event: 'RCPS 자본전환으로 부채비율 462%', impact: 'medium' },
+                { date: '2024.05', event: '메리츠증권 1.3조 리파이낸싱', impact: 'high' },
+                { date: '2024.11', event: '하나증권 ABSTB 1,500억원 발행', impact: 'medium' },
+                { date: '2024년', event: 'EBITDA 3,889억원 (역대최고)', impact: 'medium' },
+                { date: '2025.02', event: '개인투자자 판매 제재 논란 (MBK vs 증권업계)', impact: 'high' },
+                { date: '2025.03.04', event: '기업회생 신청 (예고 없이)', impact: 'critical' }
+            ];
+
+            const container = document.getElementById('timeline-events');
+            if (!container) return;
+
+            container.innerHTML = timeline.map(event => {
+                const impactColor = event.impact === 'critical' ? 'bg-red-500' : 
+                                  event.impact === 'high' ? 'bg-orange-500' : 'bg-green-500';
+                const impactText = event.impact === 'critical' ? '치명적' : 
+                                 event.impact === 'high' ? '높음' : '보통';
+                const impactBg = event.impact === 'critical' ? 'bg-red-100 text-red-800' : 
+                               event.impact === 'high' ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800';
+
+                return `
+                    <div class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                        <div class="flex-shrink-0 w-4 h-4 rounded-full mt-1 ${impactColor}"></div>
+                        <div class="flex-grow">
+                            <div class="flex items-center space-x-3">
+                                <span class="font-semibold text-gray-600">${event.date}</span>
+                                <span class="px-2 py-1 rounded-full text-xs font-medium ${impactBg}">
+                                    ${impactText}
+                                </span>
+                            </div>
+                            <p class="text-gray-800 mt-1">${event.event}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize sources
+        function initSources() {
+            const sources = [
+                { name: '비즈한국', url: 'https://www.bizhankook.com/bk/article/29046', date: '2025.02.11', category: '언론' },
+                { name: '인베스트조선', url: 'https://www.investchosun.com/site/data/html_dir/2025/03/06/2025030680234.html', date: '2025.03.06', category: '경제전문지' },
+                { name: '인베스트조선 (부채분석)', url: 'https://www.investchosun.com/m/article.html?contid=2025030480121', date: '2025.03.04', category: '경제전문지' },
+                { name: '인베스트조선 (ABSTB)', url: 'https://www.investchosun.com/site/data/html_dir/2025/04/10/2025041080149.html', date: '2025.04.10', category: '경제전문지' },
+                { name: '오피니언뉴스 (재무제표 분석)', url: 'https://www.opinionnews.co.kr/news/articleView.html?idxno=113988', date: '2025.03.12', category: '재무분석' },
+                { name: '뉴스핀 (역사분석)', url: 'https://www.newspim.com/news/view/20250304000856', date: '2025.03.04', category: '언론' },
+                { name: 'ZDNet (사모펀드 분석)', url: 'https://zdnet.co.kr/view/?no=20250312163224', date: '2025.03.12', category: 'IT전문지' },
+                { name: '더스쿱 (MBK 투자패턴)', url: 'https://www.thescoop.co.kr/news/articleView.html?idxno=303505', date: '2024.10.11', category: '언론' },
+                { name: '헤럴드경제', url: 'https://biz.heraldcorp.com/article/10437026', date: '2025.03.09', category: '언론' },
+                { name: '디지털데일리', url: 'https://m.ddaily.co.kr/page/view/2024053116275035697', date: '2024.05.31', category: '언론' }
+            ];
+
+            const container = document.getElementById('sources-list');
+            if (!container) return;
+
+            container.innerHTML = sources.map(source => {
+                const categoryColor = source.category === '경제전문지' ? 'bg-blue-100 text-blue-800' :
+                                    source.category === '재무분석' ? 'bg-green-100 text-green-800' :
+                                    source.category === 'IT전문지' ? 'bg-purple-100 text-purple-800' :
+                                    'bg-orange-100 text-orange-800';
+
+                return `
+                    <div class="border border-gray-200 rounded-lg p-4 mb-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-grow">
+                                <div class="flex items-center space-x-3">
+                                    <h4 class="font-semibold text-gray-800">${source.name}</h4>
+                                    <span class="px-2 py-1 rounded-full text-xs font-medium ${categoryColor}">
+                                        ${source.category}
+                                    </span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">발행일: ${source.date}</p>
+                            </div>
+                            <a href="${source.url}" target="_blank" rel="noopener noreferrer"
+                               class="flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+                                <span class="text-sm mr-2">🔗</span>
+                                원문 보기
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initSalesChart();
+            initProfitChart();
+            initTimeline();
+            initSources();
+        });
+    </script>
+</body>
+</html>
