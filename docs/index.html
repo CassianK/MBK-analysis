@@ -1,1 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>📊 MBK Homeplus 분석 포털</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f3f7;
+      padding: 40px;
+      color: #2c3e50;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+    }
+    .grid {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+      text-align: center;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+    }
+    .card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+    .card p {
+      font-size: 0.9rem;
+      color: #7f8c8d;
+    }
+    .card a {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: #2980b9;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📊 MBK Homeplus 분석 포털</h1>
 
+  <div class="grid">
+    <div class="card">
+      <h2>💸 Fee Analysis</h2>
+      <p>수수료 수입 구조 분석</p>
+      <a href="Fee_analysis.html" target="_blank">바로가기</a>
+    </div>
+    <div class="card">
+      <h2>🏗️ LBO 구조</h2>
+      <p>레버리지 바이아웃 구조 설명</p>
+      <a href="LBO.html" target="_blank">바로가기</a>
+    </div>
+    <div class="card">
+      <h2>🌐 LBO (English)</h2>
+      <p>영문 버전</p>
+      <a href="LBO_eng.html" target="_blank">바로가기</a>
+    </div>
+    <div class="card">
+      <h2>⚠️ Failure Analysis</h2>
+      <p>전체 실패 원인 요약</p>
+      <a href="failure_analysis.html" target="_blank">바로가기</a>
+    </div>
+  </div>
+</body>
+</html>
