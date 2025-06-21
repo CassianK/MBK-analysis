@@ -25,28 +25,6 @@
             padding: 20px;
         }
         
-        .header {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header h1 {
-            font-size: 2.5em;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        
-        .header p {
-            font-size: 1.2em;
-            color: #7f8c8d;
-            max-width: 800px;
-            margin: 0 auto;
-        }
         
         .grid {
             display: grid;
@@ -236,11 +214,16 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📊 홈플러스-MBK Partners LBO 실패 사례</h1>
-            <p>아시아 최대 레버리지 바이아웃의 몰락: 7조 2천억원 인수에서 회생절차까지의 10년 여정</p>
+    <header style="background-color:#1a365d; color:white; padding: 3rem 2rem;">
+      <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 16px;">
+        <div style="width: 20px; height: 20px; background-color: #63b3ed; transform: rotate(45deg); border-radius: 4px;"></div>
+        <div>
+          <h1 style="font-size: 1.75rem; font-weight: 700; margin: 0; color: #ffffff;">Cassian’s Strategy Lab</h1>
+          <p style="font-size: 1rem; color: #c6e2ff; margin: 0.25rem 0 0;">Inside the PE</p>
         </div>
+      </div>
+    </header>
+    <div class="container">
         
         <!-- 핵심 지표 -->
         <div class="key-metrics">
@@ -688,4 +671,14 @@
         });
     </script>
 </body>
+<footer style="background-color: #f7fafc; color: #4a5568; font-size: 14px; text-align: center; padding: 2rem; margin-top: 3rem; border-top: 1px solid #e2e8f0;">
+  <p>📘 본 페이지의 모든 콘텐츠는 학술적/연구 목적에 한하여 제공되며,<br>
+  상업적 이용, 무단 수정 및 재배포는 엄격히 금지됩니다.</p>
+  <p style="margin-top: 0.75rem;">⚖️ 본 분석은 법률적·재정적 자문이 아니며,<br>
+  어떠한 투자·의사결정에 대해서도 책임을 지지 않습니다.</p>
+  <p style="margin-top: 0.75rem;">ⓒ 2025 <strong>Dokyung Kim</strong>. 일부 권리 보유.<br>
+  본 문서는 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ko" target="_blank" style="color: #3182ce; text-decoration: none;">
+  CC BY-NC-ND 4.0</a> 라이선스를 따릅니다.</p>
+  <p style="margin-top: 0.75rem; font-style: italic; color: #2b6cb0;">🧭 Presented by Cassian’s Strategy Lab · Inside the PE</p>
+</footer>
 </html>
